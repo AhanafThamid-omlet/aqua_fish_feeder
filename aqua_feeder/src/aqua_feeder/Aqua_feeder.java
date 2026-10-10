@@ -57,8 +57,8 @@ public class Aqua_feeder extends JFrame{
 
         //Clock 
         clockLabel = new JLabel("", SwingConstants.CENTER);
-        clockLabel.setFont(new Font("TimesNewRoman", Font.BOLD, 40));
-        clockLabel.setForeground(new Color(0, 150, 0));
+        clockLabel.setFont(new Font("TimesNewRoman", Font.BOLD, 34));
+        clockLabel.setForeground(new Color(0,150, 0));
         add(clockLabel, BorderLayout.NORTH);
 
         //Schedule setup 
@@ -106,8 +106,8 @@ public class Aqua_feeder extends JFrame{
         
         JPanel setAmountPanel = new JPanel();
         setAmountField = new JTextField(6);
-        JButton setAmountBtn = new JButton("Set Food Amount");
-        setAmountPanel.add(new JLabel("New total (g):"));
+        JButton setAmountBtn = new JButton("Add Food");
+        setAmountPanel.add(new JLabel("Add food (g):"));
         setAmountPanel.add(setAmountField);
         setAmountPanel.add(setAmountBtn);
 
@@ -127,19 +127,19 @@ public class Aqua_feeder extends JFrame{
         
         setAmountBtn.addActionListener(e -> {
             try {
-                    double newAmount = Double.parseDouble(setAmountField.getText().trim());
-                if (newAmount < 0) {
-                    JOptionPane.showMessageDialog(this, "Amount cannot be negative.");
-                    return;
+                double addAmount = Double.parseDouble(setAmountField.getText().trim());
+                if (addAmount <= 0) {
+                JOptionPane.showMessageDialog(this, "Enter an amount greater than 0.");
+                return;
                 }
-            currentFoodWeight = newAmount; // overwrite, not add
-            weightLabel.setText("Food remaining: " + currentFoodWeight + " g");
-            updateSpinnerMax();
-            log("Food amount manually set to: " + currentFoodWeight + " g");
-            saveData(); // save immediately
-            setAmountField.setText("");
+                currentFoodWeight += addAmount; // 50 + 40 = 90
+                weightLabel.setText("Food remaining: " + currentFoodWeight + " g");
+                updateSpinnerMax();
+                log("Added " + addAmount + " g of food. New total: " + currentFoodWeight + " g");
+                saveData();
+                setAmountField.setText("");
             } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Enter a valid number (e.g. 150).");
+            JOptionPane.showMessageDialog(this, "Enter a valid number (e.g. 40).");
             }
         });
         
@@ -242,7 +242,7 @@ public class Aqua_feeder extends JFrame{
     }
 
     private void tick(){
-        SimpleDateFormat clockFormat = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat clockFormat = new SimpleDateFormat("hh:mm:ss a");
         SimpleDateFormat matchFormat = new SimpleDateFormat("HH:mm");
         Date now = new Date();
 
